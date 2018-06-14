@@ -1,0 +1,11 @@
+[package]
+name = "client"
+version = "0.1.0"
+authors = ["Håvar Nøvik <havar.novik@gmail.com>"]
+
+[dependencies]
+protos = { path = "../protos" }
+yew = "=0.4.0"
+protobuf = "=1.7.3"
+failure = "=0.1.1"
+stdweb = "=0.4.6"

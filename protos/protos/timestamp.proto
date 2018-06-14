@@ -1,0 +1,5 @@
+syntax = "proto2";
+
+message TimestampResponse {
+    optional uint64 timestamp = 1;
+}

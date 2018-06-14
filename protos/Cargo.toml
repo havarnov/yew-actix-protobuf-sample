@@ -1,0 +1,11 @@
+[package]
+name = "protos"
+version = "0.1.0"
+authors = ["Håvar Nøvik <havar.novik@gmail.com>"]
+build = "build.rs"
+
+[build-dependencies]
+protoc-rust = "1.5"
+
+[dependencies]
+protobuf = "1.7.3"

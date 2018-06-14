@@ -1,0 +1,9 @@
+[package]
+name = "server"
+version = "0.1.0"
+authors = ["Håvar Nøvik <havar.novik@gmail.com>"]
+
+[dependencies]
+protos = { path = "../protos" }
+actix-web = "=0.6.13"
+protobuf = "=1.7.3"
