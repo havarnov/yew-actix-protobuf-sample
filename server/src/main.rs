@@ -3,13 +3,24 @@ extern crate protobuf;
 extern crate protos;
 
 use std::time::{SystemTime, UNIX_EPOCH};
+use std::path::PathBuf;
 
-use actix_web::middleware::cors::Cors;
-use actix_web::{server, App, HttpRequest, HttpResponse};
+use actix_web::{server, App, HttpRequest, HttpResponse, fs, http::Method};
+use actix_web::Result as ActixResult;
 
 use protobuf::Message;
 
 use protos::timestamp::TimestampResponse;
+
+fn index(_req: HttpRequest) -> ActixResult<fs::NamedFile> {
+    let path: PathBuf = "./index.html".into();
+    Ok(fs::NamedFile::open(path)?)
+}
+
+fn wasm(_req: HttpRequest) -> ActixResult<fs::NamedFile> {
+    let path: PathBuf = "./static/client.wasm".into();
+    Ok(fs::NamedFile::open(path)?)
+}
 
 fn fetch_timestamp(_req: HttpRequest) -> HttpResponse {
     let mut response = TimestampResponse::new();
@@ -26,13 +37,15 @@ fn fetch_timestamp(_req: HttpRequest) -> HttpResponse {
 
 fn main() {
     server::new(|| {
-        App::new().configure(|app| {
-            Cors::for_app(app)
-                .allowed_origin("http://127.0.0.1:8000")
-                .resource("/api/timestamp", |r| r.f(fetch_timestamp))
-                .register()
-        })
-    }).bind("127.0.0.1:8001")
-        .expect("Can not bind to port 8001")
-        .run();
+        App::new()
+            .handler(
+                "/static",
+                fs::StaticFiles::new("./static"))
+            .resource("/api/timestamp", |r| r.f(fetch_timestamp))
+            .resource("/client.wasm", |r| r.f(wasm))
+            .default_resource(|r| r.method(Method::GET).f(index))
+    })
+    .bind("127.0.0.1:8001")
+    .expect("Can not bind to port 8001")
+    .run();
 }
