@@ -9,3 +9,6 @@ yew = "=0.4.0"
 protobuf = "=1.7.3"
 failure = "=0.1.1"
 stdweb = "=0.4.6"
+
+[profile.release]
+lto = true
